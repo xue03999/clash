@@ -1,0 +1,369 @@
+mode: rule
+log-level: warning
+ipv6: true
+allow-lan: false
+unified-delay: true
+tcp-concurrent: true
+find-process-mode: "off"
+profile:
+  store-selected: true
+  store-fake-ip: true
+proxy-providers:
+  老虎云:
+    type: http
+    url: 
+    path: ./proxy_providers/airport1.yaml
+    interval: 86400
+    filter: (?i)(🇭🇰|香港|Hong\s*Kong|🇹🇼|台湾|Taiwan|台北|Taipei|高雄|Kaohsiung|🇲🇴|澳门|Macao|Macau|🇨🇳|中国|China|🇯🇵|日本|Japan|东京|Tokyo|大阪|Osaka|🇰🇷|韩国|South\s*Korea|Korea|首尔|Seoul|🇸🇬|新加坡|狮城|Singapore|🇲🇾|马来西亚|Malaysia|吉隆坡|Kuala\s*Lumpur|🇹🇭|泰国|Thailand|曼谷|Bangkok|🇻🇳|越南|Vietnam|🇵🇭|菲律宾|Philippines|马尼拉|Manila|🇮🇩|印尼|印度尼西亚|Indonesia|🇮🇳|印度|India|孟买|Mumbai|班加罗尔|Bangalore|Bengaluru|🇦🇪|阿联酋|UAE|Dubai|迪拜|🇹🇷|土耳其|Turkey|🇺🇸|美国|United\s*States|USA|洛杉矶|Los\s*Angeles|圣何塞|San\s*Jose|西雅图|Seattle|纽约|New\s*York|达拉斯|Dallas|芝加哥|Chicago|🇨🇦|加拿大|Canada|🇬🇧|英国|United\s*Kingdom|Britain|伦敦|London|🇫🇷|法国|France|巴黎|Paris|🇩🇪|德国|Germany|法兰克福|Frankfurt|🇳🇱|荷兰|Netherlands|阿姆斯特丹|Amsterdam|🇮🇹|意大利|Italy|🇪🇸|西班牙|Spain|🇷🇺|俄罗斯|Russia|🇦🇺|澳大利亚|Australia|悉尼|Sydney|墨尔本|Melbourne|🇳🇿|新西兰|New\s*Zealand|(?:^|[\s._|｜/+\-])(?:HK|TW|MO|CN|JP|KR|SG|MY|TH|VN|PH|ID|IN|PK|AE|TR|IL|SA|US|USA|CA|MX|BR|AR|CL|PE|UK|GB|FR|DE|NL|IT|ES|PT|SE|NO|FI|DK|CH|AT|PL|CZ|RO|HU|UA|RU|IE|IS|BE|GR|AU|NZ|ZA|EG)(?:\d+)?(?:$|[\s._|｜/+\-]))
+    health-check:
+      enable: true
+      url: https://cp.cloudflare.com
+      interval: 86400
+      timeout: 5000
+      lazy: true
+    override:
+      udp: true
+      additional-prefix: '[老虎云] '
+    exclude-filter: (?i)流量|剩余|到期|过期|官网|客服|联系|邮箱|e-?mail|微信|wechat|qq|telegram群|tg群|频道|官方群|交流群|公告|通知|订阅|套餐|重置|刷新|邀请|t\.me|https?://|www\.|traffic|remaining|expire|expiry|subscription|website|support|contact|reset
+  封车虎:
+    type: http
+    url: 
+    path: ./proxy_providers/airport2.yaml
+    interval: 86400
+    filter: (?i)(🇭🇰|香港|Hong\s*Kong|🇹🇼|台湾|Taiwan|台北|Taipei|高雄|Kaohsiung|🇲🇴|澳门|Macao|Macau|🇨🇳|中国|China|🇯🇵|日本|Japan|东京|Tokyo|大阪|Osaka|🇰🇷|韩国|South\s*Korea|Korea|首尔|Seoul|🇸🇬|新加坡|狮城|Singapore|🇲🇾|马来西亚|Malaysia|吉隆坡|Kuala\s*Lumpur|🇹🇭|泰国|Thailand|曼谷|Bangkok|🇻🇳|越南|Vietnam|🇵🇭|菲律宾|Philippines|马尼拉|Manila|🇮🇩|印尼|印度尼西亚|Indonesia|🇮🇳|印度|India|孟买|Mumbai|班加罗尔|Bangalore|Bengaluru|🇦🇪|阿联酋|UAE|Dubai|迪拜|🇹🇷|土耳其|Turkey|🇺🇸|美国|United\s*States|USA|洛杉矶|Los\s*Angeles|圣何塞|San\s*Jose|西雅图|Seattle|纽约|New\s*York|达拉斯|Dallas|芝加哥|Chicago|🇨🇦|加拿大|Canada|🇬🇧|英国|United\s*Kingdom|Britain|伦敦|London|🇫🇷|法国|France|巴黎|Paris|🇩🇪|德国|Germany|法兰克福|Frankfurt|🇳🇱|荷兰|Netherlands|阿姆斯特丹|Amsterdam|🇮🇹|意大利|Italy|🇪🇸|西班牙|Spain|🇷🇺|俄罗斯|Russia|🇦🇺|澳大利亚|Australia|悉尼|Sydney|墨尔本|Melbourne|🇳🇿|新西兰|New\s*Zealand|(?:^|[\s._|｜/+\-])(?:HK|TW|MO|CN|JP|KR|SG|MY|TH|VN|PH|ID|IN|PK|AE|TR|IL|SA|US|USA|CA|MX|BR|AR|CL|PE|UK|GB|FR|DE|NL|IT|ES|PT|SE|NO|FI|DK|CH|AT|PL|CZ|RO|HU|UA|RU|IE|IS|BE|GR|AU|NZ|ZA|EG)(?:\d+)?(?:$|[\s._|｜/+\-]))
+    health-check:
+      enable: true
+      url: https://cp.cloudflare.com
+      interval: 86400
+      timeout: 5000
+      lazy: true
+    override:
+      udp: true
+      additional-prefix: '[封车虎] '
+    exclude-filter: (?i)流量|剩余|到期|过期|官网|客服|联系|邮箱|e-?mail|微信|wechat|qq|telegram群|tg群|频道|官方群|交流群|公告|通知|订阅|套餐|重置|刷新|邀请|t\.me|https?://|www\.|traffic|remaining|expire|expiry|subscription|website|support|contact|reset
+  熊云:
+    type: http
+    url: 
+    path: ./proxy_providers/airport3.yaml
+    interval: 86400
+    filter: (?i)(🇭🇰|香港|Hong\s*Kong|🇹🇼|台湾|Taiwan|台北|Taipei|高雄|Kaohsiung|🇲🇴|澳门|Macao|Macau|🇨🇳|中国|China|🇯🇵|日本|Japan|东京|Tokyo|大阪|Osaka|🇰🇷|韩国|South\s*Korea|Korea|首尔|Seoul|🇸🇬|新加坡|狮城|Singapore|🇲🇾|马来西亚|Malaysia|吉隆坡|Kuala\s*Lumpur|🇹🇭|泰国|Thailand|曼谷|Bangkok|🇻🇳|越南|Vietnam|🇵🇭|菲律宾|Philippines|马尼拉|Manila|🇮🇩|印尼|印度尼西亚|Indonesia|🇮🇳|印度|India|孟买|Mumbai|班加罗尔|Bangalore|Bengaluru|🇦🇪|阿联酋|UAE|Dubai|迪拜|🇹🇷|土耳其|Turkey|🇺🇸|美国|United\s*States|USA|洛杉矶|Los\s*Angeles|圣何塞|San\s*Jose|西雅图|Seattle|纽约|New\s*York|达拉斯|Dallas|芝加哥|Chicago|🇨🇦|加拿大|Canada|🇬🇧|英国|United\s*Kingdom|Britain|伦敦|London|🇫🇷|法国|France|巴黎|Paris|🇩🇪|德国|Germany|法兰克福|Frankfurt|🇳🇱|荷兰|Netherlands|阿姆斯特丹|Amsterdam|🇮🇹|意大利|Italy|🇪🇸|西班牙|Spain|🇷🇺|俄罗斯|Russia|🇦🇺|澳大利亚|Australia|悉尼|Sydney|墨尔本|Melbourne|🇳🇿|新西兰|New\s*Zealand|(?:^|[\s._|｜/+\-])(?:HK|TW|MO|CN|JP|KR|SG|MY|TH|VN|PH|ID|IN|PK|AE|TR|IL|SA|US|USA|CA|MX|BR|AR|CL|PE|UK|GB|FR|DE|NL|IT|ES|PT|SE|NO|FI|DK|CH|AT|PL|CZ|RO|HU|UA|RU|IE|IS|BE|GR|AU|NZ|ZA|EG)(?:\d+)?(?:$|[\s._|｜/+\-]))
+    health-check:
+      enable: true
+      url: https://cp.cloudflare.com
+      interval: 86400
+      timeout: 5000
+      lazy: true
+    override:
+      udp: true
+      additional-prefix: '[熊云] '
+    exclude-filter: (?i)流量|剩余|到期|过期|官网|客服|联系|邮箱|e-?mail|微信|wechat|qq|telegram群|tg群|频道|官方群|交流群|公告|通知|订阅|套餐|重置|刷新|邀请|t\.me|https?://|www\.|traffic|remaining|expire|expiry|subscription|website|support|contact|reset
+dns:
+  enable: true
+  ipv6: false
+  use-system-hosts: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+  - rule-set:private_domain
+  - +.lan
+  - +.local
+  - +.home.arpa
+  - localhost
+  - +.msftconnecttest.com
+  - +.msftncsi.com
+  - +.in-addr.arpa
+  - +.ip6.arpa
+  - time.*.com
+  - time.*.gov
+  - pool.ntp.org
+  default-nameserver:
+  - 223.5.5.5
+  - 119.29.29.29
+  proxy-server-nameserver: &id001
+  - https://dns.alidns.com/dns-query#DIRECT
+  - https://doh.pub/dns-query#DIRECT
+  nameserver: &id002
+  - https://cloudflare-dns.com/dns-query#节点选择
+  - https://dns.google/dns-query#节点选择
+  nameserver-policy:
+    rule-set:private_domain: *id001
+    rule-set:douyin_domain: *id001
+    rule-set:apple_cn: *id001
+    rule-set:cn_domain: *id001
+    +.cn: *id001
+    rule-set:gemini_domain: *id002
+    rule-set:google_domain: *id002
+    +.browserleaks.com: *id002
+    +.dnsleaktest.com: *id002
+    +.ipleak.net: *id002
+    +.ipinfo.io: *id002
+    whoami.akamai.net: *id002
+  direct-nameserver: *id001
+  direct-nameserver-follow-policy: true
+tun:
+  enable: true
+  stack: system
+  auto-route: true
+  auto-detect-interface: true
+  strict-route: true
+  dns-hijack:
+  - any:53
+  - tcp://any:53
+proxy-groups:
+- name: 节点选择
+  type: select
+  use:
+  - 老虎云
+  - 封车虎
+  - 熊云
+- name: Telegram
+  type: select
+  use:
+  - 老虎云
+  - 封车虎
+  - 熊云
+  filter: (?i)(🇸🇬|新加坡|狮城|Singapore|(?:^|[^A-Za-z])SG(?:\d+|[^A-Za-z]|$)|🇺🇸|美国|United\s*States|USA|(?:^|[^A-Za-z])US(?:\d+|[^A-Za-z]|$))
+- name: X
+  type: select
+  use:
+  - 老虎云
+  - 封车虎
+  - 熊云
+  filter: (?i)(🇸🇬|新加坡|狮城|Singapore|(?:^|[^A-Za-z])SG(?:\d+|[^A-Za-z]|$)|🇺🇸|美国|United\s*States|USA|(?:^|[^A-Za-z])US(?:\d+|[^A-Za-z]|$))
+- name: TikTok
+  type: select
+  use:
+  - 老虎云
+  - 封车虎
+  - 熊云
+  filter: (?i)(🇸🇬|新加坡|狮城|Singapore|(?:^|[^A-Za-z])SG(?:\d+|[^A-Za-z]|$)|🇺🇸|美国|United\s*States|USA|(?:^|[^A-Za-z])US(?:\d+|[^A-Za-z]|$))
+- name: AI
+  type: select
+  use:
+  - 老虎云
+  - 封车虎
+  - 熊云
+  filter: (?i)(🇺🇸|美国|United\s*States|USA|(?:^|[^A-Za-z])US(?:\d+|[^A-Za-z]|$)|🇸🇬|新加坡|狮城|Singapore|(?:^|[^A-Za-z])SG(?:\d+|[^A-Za-z]|$)|🇯🇵|日本|Japan|(?:^|[^A-Za-z])JP(?:\d+|[^A-Za-z]|$))
+- name: Google服务
+  type: select
+  use:
+  - 老虎云
+  - 封车虎
+  - 熊云
+  filter: (?i)(🇸🇬|新加坡|狮城|Singapore|(?:^|[^A-Za-z])SG(?:\d+|[^A-Za-z]|$)|🇺🇸|美国|United\s*States|USA|(?:^|[^A-Za-z])US(?:\d+|[^A-Za-z]|$))
+- name: 微软服务
+  type: select
+  proxies:
+  - DIRECT
+  use:
+  - 老虎云
+  - 封车虎
+  - 熊云
+  filter: (?i)(🇸🇬|新加坡|狮城|Singapore|(?:^|[^A-Za-z])SG(?:\d+|[^A-Za-z]|$)|🇺🇸|美国|United\s*States|USA|(?:^|[^A-Za-z])US(?:\d+|[^A-Za-z]|$))
+  url: http://www.msftconnecttest.com/connecttest.txt
+  interval: 0
+- name: 哔哩哔哩
+  type: select
+  proxies:
+  - DIRECT
+  use:
+  - 老虎云
+  - 封车虎
+  - 熊云
+  filter: (?i)(🇭🇰|香港|Hong\s*Kong|(?:^|[^A-Za-z])HK(?:\d+|[^A-Za-z]|$)|🇹🇼|台湾|Taiwan|(?:^|[^A-Za-z])TW(?:\d+|[^A-Za-z]|$))
+  url: http://www.msftconnecttest.com/connecttest.txt
+  interval: 0
+- name: Bybit
+  type: select
+  use:
+  - 老虎云
+  - 封车虎
+  - 熊云
+  filter: (?i)(🇯🇵|日本|Japan|(?:^|[^A-Za-z])JP(?:\d+|[^A-Za-z]|$)|🇹🇼|台湾|Taiwan|(?:^|[^A-Za-z])TW(?:\d+|[^A-Za-z]|$))
+rule-anchor:
+  domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+  ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    interval: 86400
+rule-providers:
+  private_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/private_domain.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/private.mrs
+  private_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    interval: 86400
+    path: ./ruleset/private_ip.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/private.mrs
+  cn_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/cn_domain.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/cn.mrs
+  cn_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    interval: 86400
+    path: ./ruleset/cn_ip.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs
+  douyin_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/douyin_domain.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/douyin.mrs
+  apple_cn:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/apple_cn.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple-cn.mrs
+  telegram_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/telegram_domain.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/telegram.mrs
+  telegram_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    interval: 86400
+    path: ./ruleset/telegram_ip.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.mrs
+  twitter_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/twitter_domain.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/twitter.mrs
+  tiktok_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/tiktok_domain.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/tiktok.mrs
+  youtube_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/youtube_domain.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/youtube.mrs
+  google_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/google_domain.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google.mrs
+  google_ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    interval: 86400
+    path: ./ruleset/google_ip.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/google.mrs
+  gemini_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/gemini_domain.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google-gemini.mrs
+  microsoft_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/microsoft_domain.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/microsoft.mrs
+  bilibili_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/bilibili_domain.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/bilibili.mrs
+  ai_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/ai_domain.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-ai-!cn.mrs
+  bybit_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/bybit_domain.mrs
+    url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/bybit.mrs
+  ads_domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/adblockmihomolite.mrs
+    url: https://fastly.jsdelivr.net/gh/217heidai/adblockfilters@main/rules/adblockmihomolite.mrs
+rules:
+- RULE-SET,telegram_domain,Telegram
+- RULE-SET,telegram_ip,Telegram,no-resolve
+- RULE-SET,private_domain,DIRECT
+- RULE-SET,private_ip,DIRECT,no-resolve
+- RULE-SET,douyin_domain,DIRECT
+- AND,((NETWORK,UDP),(DST-PORT,3478-3481)),REJECT
+- AND,((NETWORK,UDP),(DST-PORT,5349-5350)),REJECT
+- AND,((NETWORK,UDP),(DST-PORT,19302-19309)),REJECT
+- DOMAIN-SUFFIX,browserleaks.com,节点选择
+- DOMAIN-SUFFIX,dnsleaktest.com,节点选择
+- DOMAIN-SUFFIX,ipleak.net,节点选择
+- DOMAIN-SUFFIX,ipinfo.io,节点选择
+- DOMAIN,whoami.akamai.net,节点选择
+- RULE-SET,ads_domain,REJECT
+- RULE-SET,apple_cn,DIRECT
+- DOMAIN-SUFFIX,github.com,节点选择
+- DOMAIN-SUFFIX,githubusercontent.com,节点选择
+- DOMAIN-SUFFIX,githubassets.com,节点选择
+- DOMAIN-SUFFIX,github.io,节点选择
+- DOMAIN,gemini.google.com,AI
+- DOMAIN,aistudio.google.com,AI
+- DOMAIN,robinfrontend-pa.googleapis.com,AI
+- DOMAIN,webchannel-robinfrontend-pa.googleapis.com,AI
+- DOMAIN,generativelanguage.googleapis.com,AI
+- DOMAIN,alkalimakersuite-pa.googleapis.com,AI
+- DOMAIN,proactivebackend-pa.googleapis.com,AI
+- RULE-SET,gemini_domain,AI
+- RULE-SET,ai_domain,AI
+- RULE-SET,twitter_domain,X
+- RULE-SET,tiktok_domain,TikTok
+- RULE-SET,youtube_domain,Google服务
+- RULE-SET,google_domain,Google服务
+- RULE-SET,google_ip,Google服务,no-resolve
+- RULE-SET,microsoft_domain,微软服务
+- RULE-SET,bilibili_domain,哔哩哔哩
+- RULE-SET,bybit_domain,Bybit
+- AND,((NETWORK,UDP),(DST-PORT,123)),DIRECT
+- RULE-SET,cn_domain,DIRECT
+- DOMAIN-SUFFIX,cn,DIRECT
+- RULE-SET,cn_ip,DIRECT,no-resolve
+- MATCH,节点选择
