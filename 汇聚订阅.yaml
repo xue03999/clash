@@ -3,7 +3,7 @@ log-level: warning
 ipv6: true
 allow-lan: false
 unified-delay: true
-tcp-concurrent: true
+tcp-concurrent: false
 find-process-mode: "off"
 profile:
   store-selected: true
@@ -318,6 +318,13 @@ rule-providers:
     interval: 86400
     path: ./ruleset/bybit_domain.mrs
     url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/bybit.mrs
+  awavenue_ads:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    path: ./ruleset/awavenue_ads.mrs
+    url: https://gcore.jsdelivr.net/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Clash.mrs
   ads_domain:
     type: http
     behavior: domain
@@ -339,6 +346,8 @@ rules:
 - DOMAIN-SUFFIX,ipleak.net,节点选择
 - DOMAIN-SUFFIX,ipinfo.io,节点选择
 - DOMAIN,whoami.akamai.net,节点选择
+- DOMAIN,m1.ad.10010.com,REJECT
+- RULE-SET,awavenue_ads,REJECT
 - RULE-SET,ads_domain,REJECT
 - RULE-SET,apple_cn,DIRECT
 - DOMAIN-SUFFIX,github.com,节点选择
