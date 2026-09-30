@@ -189,6 +189,11 @@ function main(config) {
     "https://dns.google/dns-query#节点选择"
   ];
 
+  var telegramDNS = [
+    "https://cloudflare-dns.com/dns-query#Telegram",
+    "https://dns.google/dns-query#Telegram"
+  ];
+
   config.dns = {
     enable: true,
     ipv6: false,
@@ -204,10 +209,15 @@ function main(config) {
       "rule-set:private_domain": domesticDNS,
       "rule-set:douyin_domain": domesticDNS,
       "rule-set:apple_cn": domesticDNS,
+
+      "rule-set:telegram_domain": telegramDNS,
+
       "rule-set:gemini_domain": foreignDNS,
       "rule-set:google_domain": foreignDNS,
+
       "rule-set:cn_domain": domesticDNS,
       "+.cn": domesticDNS,
+
       "+.browserleaks.com": foreignDNS,
       "+.dnsleaktest.com": foreignDNS,
       "+.ipleak.net": foreignDNS,
