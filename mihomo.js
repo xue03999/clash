@@ -2,6 +2,9 @@ function main(config) {
   var raw = Array.isArray(config.proxies) ? config.proxies : [];
   if (!raw.length) return config;
 
+  // Clash / Mihomo 系通用测速地址
+  var TEST_URL = "http://www.gstatic.com/generate_204";
+
   // 只保留名称里带地区信息的节点
   var flag = /\uD83C[\uDDE6-\uDDFF]\uD83C[\uDDE6-\uDDFF]/;
   var regionText = /(香港|台湾|澳门|中国|日本|韩国|新加坡|马来西亚|泰国|越南|菲律宾|印尼|印度|美国|加拿大|英国|法国|德国|荷兰|意大利|西班牙|俄罗斯|澳大利亚|新西兰|东京|大阪|首尔|台北|高雄|洛杉矶|圣何塞|西雅图|纽约|芝加哥|达拉斯|伦敦|巴黎|法兰克福|阿姆斯特丹|悉尼|墨尔本|Hong\s*Kong|Taiwan|Macau|Japan|Korea|Singapore|United\s*States|USA|Canada|United\s*Kingdom|France|Germany|Netherlands|Australia|Tokyo|Osaka|Seoul|Taipei|Los\s*Angeles|San\s*Jose|Seattle|New\s*York|London|Paris|Frankfurt|Amsterdam|Sydney|Melbourne)/i;
@@ -14,16 +17,15 @@ function main(config) {
 
   var infoNode = /(剩余|流量|到期|过期|套餐|官网|客服|公告|通知|订阅|重置|traffic|remaining|expire|expiry|subscription)/i;
 
-
   function hasRegion(name) {
-  if (typeof name !== "string") return false;
+    if (typeof name !== "string") return false;
 
-  if (infoNode.test(name)) return false;
+    if (infoNode.test(name)) return false;
 
-  return flag.test(name) ||
-         regionText.test(name) ||
-         regionCode.test(name);
-}
+    return flag.test(name) ||
+           regionText.test(name) ||
+           regionCode.test(name);
+  }
 
   var proxies = [];
   for (var i = 0; i < raw.length; i++) {
@@ -172,6 +174,11 @@ function main(config) {
     }
   };
 
+  var bootstrapDNS = [
+    "223.5.5.5",
+    "119.29.29.29"
+  ];
+
   var domesticDNS = [
     "https://dns.alidns.com/dns-query#DIRECT",
     "https://doh.pub/dns-query#DIRECT"
@@ -188,12 +195,9 @@ function main(config) {
     "use-system-hosts": false,
     "enhanced-mode": "redir-host",
 
-    "default-nameserver": [
-      "223.5.5.5",
-      "119.29.29.29"
-    ],
+    "default-nameserver": bootstrapDNS,
 
-    "proxy-server-nameserver": domesticDNS,
+    "proxy-server-nameserver": bootstrapDNS,
     nameserver: foreignDNS,
 
     "nameserver-policy": {
@@ -219,16 +223,13 @@ function main(config) {
     var g = {
       name: name,
       type: "select",
-      proxies: unique(safe(list))
+      proxies: unique(safe(list)),
+      url: TEST_URL,
+      interval: 0
     };
 
     if (icon) {
       g.icon = icon;
-    }
-
-    if (testDirect) {
-      g.url = "http://www.msftconnecttest.com/connecttest.txt";
-      g.interval = 0;
     }
 
     return g;
@@ -348,16 +349,13 @@ function main(config) {
   ];
 
   config.proxies = proxies;
-  config.mode = "rule";
+config.mode = "rule";
 
-  if (!config.profile || typeof config.profile !== "object") {
-    config.profile = {};
-  }
+if (!config.profile || typeof config.profile !== "object") {
+  config.profile = {};
+}
 
-  config.profile["store-selected"] = true;
-  config.profile["store-fake-ip"] = true;
+config.profile["store-selected"] = true;
 
-  delete config["global-client-fingerprint"];
-
-  return config;
+return config;
 }
