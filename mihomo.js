@@ -1,97 +1,146 @@
-const main = (config) => {
-  const raw = Array.isArray(config.proxies) ? config.proxies : [];
+function main(config) {
+  var raw = Array.isArray(config.proxies) ? config.proxies : [];
   if (!raw.length) return config;
 
-  const flag = /[\u{1F1E6}-\u{1F1FF}]{2}/u;
-  const regionWords = /(?:香港|Hong\s*Kong|台湾|Taiwan|澳门|Macao|Macau|中国|China|日本|Japan|韩国|South\s*Korea|Korea|新加坡|狮城|Singapore|马来西亚|Malaysia|泰国|Thailand|越南|Vietnam|菲律宾|Philippines|印度尼西亚|印尼|Indonesia|印度|India|巴基斯坦|Pakistan|阿联酋|UAE|United\s*Arab\s*Emirates|土耳其|Turkey|以色列|Israel|沙特|Saudi\s*Arabia|美国|United\s*States|USA|加拿大|Canada|墨西哥|Mexico|巴西|Brazil|阿根廷|Argentina|智利|Chile|秘鲁|Peru|英国|United\s*Kingdom|Britain|法国|France|德国|Germany|荷兰|Netherlands|意大利|Italy|西班牙|Spain|葡萄牙|Portugal|瑞典|Sweden|挪威|Norway|芬兰|Finland|丹麦|Denmark|瑞士|Switzerland|奥地利|Austria|波兰|Poland|捷克|Czech|罗马尼亚|Romania|匈牙利|Hungary|乌克兰|Ukraine|俄罗斯|Russia|爱尔兰|Ireland|冰岛|Iceland|比利时|Belgium|希腊|Greece|澳大利亚|Australia|新西兰|New\s*Zealand|南非|South\s*Africa|埃及|Egypt)/i;
-  const regionCode = /(?:^|[^A-Za-z])(?:HK|TW|MO|CN|JP|KR|SG|MY|TH|VN|PH|ID|IN|PK|AE|TR|IL|SA|US|USA|CA|MX|BR|AR|CL|PE|UK|GB|FR|DE|NL|IT|ES|PT|SE|NO|FI|DK|CH|AT|PL|CZ|RO|HU|UA|RU|IE|IS|BE|GR|AU|NZ|ZA|EG)(?:\d+|[^A-Za-z]|$)/i;
+  // 只保留名称里带地区信息的节点
+  var flag = /\uD83C[\uDDE6-\uDDFF]\uD83C[\uDDE6-\uDDFF]/;
+  var regionText = /(香港|台湾|澳门|中国|日本|韩国|新加坡|马来西亚|泰国|越南|菲律宾|印尼|印度|美国|加拿大|英国|法国|德国|荷兰|意大利|西班牙|俄罗斯|澳大利亚|新西兰|东京|大阪|首尔|台北|高雄|洛杉矶|圣何塞|西雅图|纽约|芝加哥|达拉斯|伦敦|巴黎|法兰克福|阿姆斯特丹|悉尼|墨尔本|Hong\s*Kong|Taiwan|Macau|Japan|Korea|Singapore|United\s*States|USA|Canada|United\s*Kingdom|France|Germany|Netherlands|Australia|Tokyo|Osaka|Seoul|Taipei|Los\s*Angeles|San\s*Jose|Seattle|New\s*York|London|Paris|Frankfurt|Amsterdam|Sydney|Melbourne)/i;
+  var regionCode = /(?:^|[\s._|｜/+\-])(?:HK|TW|MO|CN|JP|KR|SG|MY|TH|VN|PH|ID|IN|PK|AE|TR|IL|SA|US|USA|CA|MX|BR|AR|CL|PE|UK|GB|FR|DE|NL|IT|ES|PT|SE|NO|FI|DK|CH|AT|PL|CZ|RO|HU|UA|RU|IE|IS|BE|GR|AU|NZ|ZA|EG)(?:\d+)?(?=$|[\s._|｜/+\-])/i;
 
-  const region = {
-    HK: /(🇭🇰|香港|Hong\s*Kong|(?:^|[^A-Za-z])HK(?:\d+|[^A-Za-z]|$))/i,
-    TW: /(🇹🇼|台湾|Taiwan|(?:^|[^A-Za-z])TW(?:\d+|[^A-Za-z]|$))/i,
-    SG: /(🇸🇬|新加坡|狮城|Singapore|(?:^|[^A-Za-z])SG(?:\d+|[^A-Za-z]|$))/i,
-    JP: /(🇯🇵|日本|Japan|(?:^|[^A-Za-z])JP(?:\d+|[^A-Za-z]|$))/i,
-    US: /(🇺🇸|美国|United\s*States|USA|(?:^|[^A-Za-z])US(?:\d+|[^A-Za-z]|$))/i
-  };
+  function isBuiltin(p) {
+    var type = String(p && p.type ? p.type : "").toLowerCase();
+    return ["direct", "reject", "reject-drop", "pass", "compatible"].indexOf(type) !== -1;
+  }
 
-  const isBuiltin = p => ["direct", "reject", "reject-drop", "pass", "compatible"]
-    .includes(String(p?.type || "").toLowerCase());
+  var infoNode = /(剩余|流量|到期|过期|套餐|官网|客服|公告|通知|订阅|重置|traffic|remaining|expire|expiry|subscription)/i;
 
-  const hasRegion = name => {
-    if (typeof name !== "string" || !name.trim()) return false;
-    return flag.test(name) || regionWords.test(name) || regionCode.test(name);
-  };
 
-  let proxies = raw
-    .filter(p => p && typeof p.name === "string")
-    .filter(p => !isBuiltin(p))
-    .filter(p => hasRegion(p.name));
+  function hasRegion(name) {
+  if (typeof name !== "string") return false;
 
-  if (!proxies.length) return config;
+  if (infoNode.test(name)) return false;
 
-  const used = new Set();
+  return flag.test(name) ||
+         regionText.test(name) ||
+         regionCode.test(name);
+}
 
-  proxies = proxies.map(proxy => {
-    const p = { ...proxy };
-    const base = p.name;
+  var proxies = [];
+  for (var i = 0; i < raw.length; i++) {
+    var source = raw[i];
+    if (!source || typeof source.name !== "string") continue;
+    if (isBuiltin(source)) continue;
+    if (!hasRegion(source.name)) continue;
 
-    if (used.has(base)) {
-      let n = 2;
-      while (used.has(`${base} ${n}`)) n++;
-      p.name = `${base} ${n}`;
+    var p = {};
+    for (var k in source) {
+      if (Object.prototype.hasOwnProperty.call(source, k)) p[k] = source[k];
+    }
+    proxies.push(p);
+  }
+
+  // 同名节点自动加序号，并保持 UDP/HY2 可用
+  var used = [];
+  for (var j = 0; j < proxies.length; j++) {
+    var proxy = proxies[j];
+    var base = proxy.name;
+
+    if (used.indexOf(base) !== -1) {
+      var n = 2;
+      while (used.indexOf(base + " " + n) !== -1) n++;
+      proxy.name = base + " " + n;
     }
 
-    used.add(p.name);
-    p.udp = true;
+    used.push(proxy.name);
+    proxy.udp = true;
 
-    const type = String(p.type || "").toLowerCase();
+    var proxyType = String(proxy.type || "").toLowerCase();
 
     if (
-      ["trojan", "vless", "vmess"].includes(type) &&
-      !p["client-fingerprint"] &&
-      (p.tls || p["reality-opts"])
+      ["trojan", "vless", "vmess"].indexOf(proxyType) !== -1 &&
+      !proxy["client-fingerprint"] &&
+      (proxy.tls || proxy["reality-opts"])
     ) {
-      p["client-fingerprint"] = "chrome";
+      proxy["client-fingerprint"] = "chrome";
+    }
+  }
+
+  var allNames = [];
+  for (var a = 0; a < proxies.length; a++) {
+    allNames.push(proxies[a].name);
+  }
+
+  // 策略组地区分类
+  var region = {
+    HK: /(🇭🇰|香港|Hong\s*Kong|(?:^|[\s._|｜/+\-])HK(?:\d+)?(?=$|[\s._|｜/+\-]))/i,
+    TW: /(🇹🇼|台湾|Taiwan|台北|高雄|(?:^|[\s._|｜/+\-])TW(?:\d+)?(?=$|[\s._|｜/+\-]))/i,
+    SG: /(🇸🇬|新加坡|狮城|Singapore|(?:^|[\s._|｜/+\-])SG(?:\d+)?(?=$|[\s._|｜/+\-]))/i,
+    JP: /(🇯🇵|日本|Japan|东京|大阪|(?:^|[\s._|｜/+\-])JP(?:\d+)?(?=$|[\s._|｜/+\-]))/i,
+    US: /(🇺🇸|美国|United\s*States|USA|洛杉矶|圣何塞|西雅图|纽约|芝加哥|达拉斯|(?:^|[\s._|｜/+\-])US(?:\d+)?(?=$|[\s._|｜/+\-]))/i
+  };
+
+  function unique(list) {
+    var out = [];
+    for (var i = 0; i < list.length; i++) {
+      if (out.indexOf(list[i]) === -1) out.push(list[i]);
+    }
+    return out;
+  }
+
+  function byRegion(keys) {
+    var out = [];
+
+    for (var i = 0; i < keys.length; i++) {
+      var re = region[keys[i]];
+      if (!re) continue;
+
+      for (var j = 0; j < proxies.length; j++) {
+        if (re.test(proxies[j].name)) {
+          out.push(proxies[j].name);
+        }
+      }
     }
 
-    return p;
-  });
+    return unique(out);
+  }
 
-  const allNames = proxies.map(p => p.name);
+  function safe(list) {
+    return list.length ? list : ["节点选择"];
+  }
 
-  const byRegion = (...keys) => [...new Set(keys.flatMap(key =>
-    proxies
-      .filter(p => region[key].test(p.name))
-      .map(p => p.name)
-  ))];
+  var sgUs = byRegion(["SG", "US"]);
+  var usSgJp = byRegion(["US", "SG", "JP"]);
+  var hkTw = byRegion(["HK", "TW"]);
+  var jpTw = byRegion(["JP", "TW"]);
 
-  const safe = list => list.length ? list : ["节点选择"];
-
-  const sgUs = byRegion("SG", "US");
-  const usSgJp = byRegion("US", "SG", "JP");
-  const hkTw = byRegion("HK", "TW");
-  const jpTw = byRegion("JP", "TW");
-
-  const META =
+  var META =
     "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo";
 
-  const domain = (name, file = name) => ({
-    type: "http",
-    behavior: "domain",
-    format: "mrs",
-    interval: 86400,
-    url: `${META}/geosite/${file}.mrs`,
-    path: `./ruleset/${name}.mrs`
-  });
+  function domain(name, file) {
+    file = file || name;
 
-  const ip = (name, file = name) => ({
-    type: "http",
-    behavior: "ipcidr",
-    format: "mrs",
-    interval: 86400,
-    url: `${META}/geoip/${file}.mrs`,
-    path: `./ruleset/${name}.mrs`
-  });
+    return {
+      type: "http",
+      behavior: "domain",
+      format: "mrs",
+      interval: 86400,
+      url: META + "/geosite/" + file + ".mrs",
+      path: "./ruleset/" + name + ".mrs"
+    };
+  }
+
+  function ip(name, file) {
+    file = file || name;
+
+    return {
+      type: "http",
+      behavior: "ipcidr",
+      format: "mrs",
+      interval: 86400,
+      url: META + "/geoip/" + file + ".mrs",
+      path: "./ruleset/" + name + ".mrs"
+    };
+  }
 
   config["rule-providers"] = {
     private_domain: domain("private_domain", "private"),
@@ -123,12 +172,12 @@ const main = (config) => {
     }
   };
 
-  const domesticDNS = [
+  var domesticDNS = [
     "https://dns.alidns.com/dns-query#DIRECT",
     "https://doh.pub/dns-query#DIRECT"
   ];
 
-  const foreignDNS = [
+  var foreignDNS = [
     "https://cloudflare-dns.com/dns-query#节点选择",
     "https://dns.google/dns-query#节点选择"
   ];
@@ -151,13 +200,10 @@ const main = (config) => {
       "rule-set:private_domain": domesticDNS,
       "rule-set:douyin_domain": domesticDNS,
       "rule-set:apple_cn": domesticDNS,
-
       "rule-set:gemini_domain": foreignDNS,
       "rule-set:google_domain": foreignDNS,
-
       "rule-set:cn_domain": domesticDNS,
       "+.cn": domesticDNS,
-
       "+.browserleaks.com": foreignDNS,
       "+.dnsleaktest.com": foreignDNS,
       "+.ipleak.net": foreignDNS,
@@ -169,24 +215,29 @@ const main = (config) => {
     "direct-nameserver-follow-policy": true
   };
 
-  const group = (name, list, icon, testDirect = false) => ({
-    name,
-    type: "select",
+  function group(name, list, icon, testDirect) {
+    var g = {
+      name: name,
+      type: "select",
+      proxies: unique(safe(list))
+    };
 
-    ...(icon ? { icon } : {}),
+    if (icon) {
+      g.icon = icon;
+    }
 
-    proxies: [...new Set(safe(list))],
+    if (testDirect) {
+      g.url = "http://www.msftconnecttest.com/connecttest.txt";
+      g.interval = 0;
+    }
 
-    ...(testDirect ? {
-      url: "http://www.msftconnecttest.com/connecttest.txt",
-      interval: 0
-    } : {})
-  });
+    return g;
+  }
 
   config["proxy-groups"] = [
     group(
       "节点选择",
-      allNames,
+      allNames.length ? allNames : ["DIRECT"],
       "https://i.postimg.cc/wBkXs3tr/Airport.png"
     ),
 
@@ -222,14 +273,14 @@ const main = (config) => {
 
     group(
       "微软服务",
-      [...sgUs, "DIRECT"],
+      sgUs.concat(["DIRECT"]),
       "https://i.postimg.cc/903KTFFF/Microsoft.png",
       true
     ),
 
     group(
       "哔哩哔哩",
-      [...hkTw,"DIRECT"],
+      hkTw.concat(["DIRECT"]),
       "https://i.postimg.cc/mrV9gqq3/bilibili.png",
       true
     ),
@@ -278,14 +329,11 @@ const main = (config) => {
 
     "RULE-SET,gemini_domain,AI",
     "RULE-SET,ai_domain,AI",
-
     "RULE-SET,twitter_domain,X",
     "RULE-SET,tiktok_domain,TikTok",
-
     "RULE-SET,youtube_domain,Google服务",
     "RULE-SET,google_domain,Google服务",
     "RULE-SET,google_ip,Google服务,no-resolve",
-
     "RULE-SET,microsoft_domain,微软服务",
     "RULE-SET,bilibili_domain,哔哩哔哩",
     "RULE-SET,bybit_domain,Bybit",
@@ -302,13 +350,14 @@ const main = (config) => {
   config.proxies = proxies;
   config.mode = "rule";
 
-  config.profile = {
-    ...(config.profile || {}),
-    "store-selected": true,
-    "store-fake-ip": true
-  };
-  
+  if (!config.profile || typeof config.profile !== "object") {
+    config.profile = {};
+  }
+
+  config.profile["store-selected"] = true;
+  config.profile["store-fake-ip"] = true;
+
   delete config["global-client-fingerprint"];
 
   return config;
-};
+}
