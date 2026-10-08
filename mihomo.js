@@ -4,6 +4,7 @@ function main(config) {
 
   // Clash / Mihomo 通用手动测速地址
   var TEST_URL = "http://www.gstatic.com/generate_204";
+  var DIRECT_TEST_URL = "http://www.msftconnecttest.com/connecttest.txt";
 
   // 只保留名称里带地区信息的真实节点
   var flag = /\uD83C[\uDDE6-\uDDFF]\uD83C[\uDDE6-\uDDFF]/;
@@ -302,19 +303,12 @@ function main(config) {
   // =========================
   // 策略组
   // =========================
-
-  function group(name, list, icon) {
+  function group(name, list, icon, directTest) {
     var g = {
       name: name,
       type: "select",
-
-      // 保持机场原始顺序
       proxies: unique(safe(list)),
-
-      // 只用于手动测速
-      url: TEST_URL,
-
-      // 不后台自动测速
+      url: directTest ? DIRECT_TEST_URL : TEST_URL,
       interval: 0
     };
 
@@ -365,13 +359,15 @@ function main(config) {
     group(
       "微软服务",
       sgUs.concat(["DIRECT"]),
-      "https://i.postimg.cc/903KTFFF/Microsoft.png"
+      "https://i.postimg.cc/903KTFFF/Microsoft.png",
+      true
     ),
 
     group(
       "哔哩哔哩",
       hkTw.concat(["DIRECT"]),
-      "https://i.postimg.cc/mrV9gqq3/bilibili.png"
+      "https://i.postimg.cc/mrV9gqq3/bilibili.png",
+      true
     ),
 
     group(
